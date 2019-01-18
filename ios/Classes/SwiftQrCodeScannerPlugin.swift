@@ -2,13 +2,21 @@ import Flutter
 import UIKit
 
 public class SwiftQrCodeScannerPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "qr_code_scanner", binaryMessenger: registrar.messenger())
-    let instance = SwiftQrCodeScannerPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+    var factory: QRViewFactory
+    public init(with registrar: FlutterPluginRegistrar) {
+        self.factory = QRViewFactory(withRegistrar: registrar)
+        registrar.register(factory, withId: "net.touchcapture.qrcodescanner/qrview")
+    }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
-  }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        registrar.addApplicationDelegate(SwiftQrCodeScannerPlugin(with: registrar))
+    }
+
+    public func applicationDidEnterBackground(_ application: UIApplication) {
+
+    }
+
+    public func applicationWillTerminate(_ application: UIApplication) {
+
+    }
 }
